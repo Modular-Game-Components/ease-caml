@@ -1,0 +1,3 @@
+(executables
+  (names simple_tween simple_tween_manager)
+  (libraries raylib ease-caml))

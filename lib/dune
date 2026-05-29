@@ -1,0 +1,6 @@
+(library
+ (wrapped false)
+ (name ease_caml)
+ (public_name ease-caml)
+ (modules Tween Easers)
+)
