@@ -52,7 +52,7 @@ let ty = Tween.make_tween (0.0 -. 40.0) 225.0 Easers.bounce ball.y
 Tween.update_tween ty (Raylib.get_frame_time ());
 ```
 
-Then after the `clear_background Color.raywhite` add
+Then after the `clear_background Color.raywhite;` add
 
 ```ocaml
 draw_circle_v (Raylib.Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
