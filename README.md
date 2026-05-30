@@ -17,8 +17,6 @@ let rec loop () =
     let open Raylib in
     begin_drawing ();
     clear_background Color.raywhite;
-    draw_text "Congrats! You created your first window!" 190 200 20
-      Color.lightgray;
     end_drawing ();
     loop ()
 
