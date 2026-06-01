@@ -68,7 +68,7 @@ Tween.update_tween ty (get_frame_time ());
 Then after the `clear_background Color.raywhite;` add
 
 ```ocaml
-draw_circle_v (Raylib.Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
+draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
 ```
 
 to actually draw the ball. 
