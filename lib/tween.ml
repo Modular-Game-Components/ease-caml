@@ -3,7 +3,6 @@ type tween_node =
   start_val: float;
   end_val: float;
   ease_func: float -> float;
-  mutable cur_repeat: int;
   mutable progress: float;
   obj: float ref;
 }
@@ -30,7 +29,6 @@ let make_tween_node (sv: float) (ev: float) (ef: float -> float) (obj: float ref
   start_val = sv;
   end_val = ev;
   progress = 0.0;
-  cur_repeat = 0;
   ease_func = ef;
   obj = obj;
 }
