@@ -1,12 +1,4 @@
-type tween_node =
-{
-  start_val: float;
-  end_val: float;
-  ease_func: float -> float;
-  mutable progress: float;
-  obj: float ref;
-}
-
+type tween_node
 type tween
 
 type tween_manager = tween list ref
