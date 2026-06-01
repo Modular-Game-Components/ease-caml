@@ -20,7 +20,7 @@ type tween = Node of tween_node
 
 type tween_manager = tween list ref
 
-let make_tween_node (sv: float) (ev: float) (ef: float -> float) (d: float) (obj: float ref) = {
+let make_tween_node (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float -> float = (fun x -> x)) (d: float) = {
   start_val = sv;
   end_val = ev;
   progress = 0.0;
@@ -31,8 +31,8 @@ let make_tween_node (sv: float) (ev: float) (ef: float -> float) (d: float) (obj
   duration = d;
 }
 
-let make_tween (sv: float) (ev: float) (ef: float -> float) (d: float) (obj: float ref) : tween =
-  let tween_node = make_tween_node sv ev ef d obj in 
+let make_tween (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float -> float = (fun x -> x)) (d: float) : tween =
+  let tween_node = make_tween_node obj ~sv:sv ev ~ef:ef d in 
   Node tween_node
 
 let repeat (t: tween) (count: int) = match t with

@@ -6,7 +6,7 @@ type circle =
 }
 
 let ball : circle = { r = 40.0; x = 400.0; y = ref ~-.40.0 }
-let ty = Tween.make_tween (0.0 -. 40.0) 225.0 Easers.bounce 1.0 ball.y
+let ty = Tween.make_tween ball.y 225.0 ~ef:Easers.bounce 1.0
 let tyr = Tween.repeat ty ~-1
 let tm = Tween.new_manager ()
 

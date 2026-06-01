@@ -6,8 +6,8 @@ type circle =
 }
 
 let ball : circle = { r = 40.0; x = ref 200.0; y = 225.0 }
-let left = Tween.make_tween 200.0 600.0 Easers.quad 1.0 ball.x
-let right = Tween.make_tween 600.0 200.0 Easers.quad 1.0 ball.x
+let left = Tween.make_tween ball.x 600.0 ~ef:Easers.quad 1.0
+let right = Tween.make_tween ball.x ~sv:600.0 200.0 ~ef:Easers.quad 1.0
 let repeat = Tween.repeat (Tween.extend left right) ~-1
 let tm = Tween.new_manager ()
 
