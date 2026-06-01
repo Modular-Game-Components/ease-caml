@@ -30,3 +30,10 @@ val update : tween_manager -> float -> unit
     original tween a number of times. If the number supplied is `~-1`, then
     the tween generated will repeat the original tween indefinitely. *)
 val repeat : tween -> int -> tween
+
+(** Take a tween and return a tween that plays the first tween *then* the
+    second. *)
+val extend : tween -> tween -> tween
+
+(** Shorthand binary operation for `extend` *)
+val ( $> ) : tween -> tween -> tween
