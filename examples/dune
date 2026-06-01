@@ -1,3 +1,4 @@
 (executables
-  (names simple_tween repeat_simple_tween repeat_twice back_and_forth)
+  (names simple_tween repeat_simple_tween repeat_twice back_and_forth 
+         comb_back_and_forth)
   (libraries raylib ease-caml))

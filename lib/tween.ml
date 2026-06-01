@@ -99,6 +99,28 @@ let extend (t1: tween) (t2: tween) =
 
 let ( $> ) = extend
 
+let dummy = ref 0.0
+let empty_tween =
+{
+  start_val = 0.0;
+  end_val = 0.0;
+  ease_func = (fun x -> x);
+  progress = 0.0;
+  repeat = 1;
+  cur_repeat = 0;
+  obj = dummy;
+} 
+
+let rec combine (tweens: tween list) : tween = match tweens with
+  | [] -> Node empty_tween
+  | [a] -> a
+  | h::t -> Nested {
+              tween_left = h;
+              tween_right = combine t;
+              repeat = 1;
+              cur_repeat = 0;
+            }
+
 let update (tm: tween_manager) (dt: float) : unit =
   List.iter (fun x -> update_tween x dt) !tm;
   tm := List.filter (fun x -> not (is_finished x)) !tm

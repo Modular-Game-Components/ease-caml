@@ -35,5 +35,9 @@ val repeat : tween -> int -> tween
     second. *)
 val extend : tween -> tween -> tween
 
+(** Take a list of tweens and return a tween that plays each supplied tween in
+    order. *)
+val combine : tween list -> tween
+
 (** Shorthand binary operation for `extend` *)
 val ( $> ) : tween -> tween -> tween
