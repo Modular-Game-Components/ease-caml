@@ -42,10 +42,10 @@ This will create a ball just outside the viewport. Note that `y` is a `float ref
 Now we will create a tween to move the ball, right below `let ball : circle = ...` add
 
 ```ocaml
-let ty = Tween.make_tween ~-.40.0 225.0 Easers.bounce ball.y
+let ty = Tween.make_tween ~-.40.0 225.0 Easers.bounce 1.0 ball.y
 ```
 
-`~-.40.0` is the start value of `y`, `225.0` is the end value and it will transition from start value to end value using a pre-defined `bounce` function. `ball.y` argument indicates what value `ty` is targeting.
+`~-.40.0` is the start value of `y`, `225.0` is the end value and it will transition from start value to end value using a pre-defined `bounce` function for `1.0` duration. `ball.y` argument indicates what value `ty` is targeting.
 
 Also, we will need a `tween_manager` that updates all of our tweens for us. Right below add:
 
@@ -84,7 +84,7 @@ type circle =
 }
 
 let ball : circle = { r = 40.0; x = 400.0; y = ref ~-.40.0 }
-let ty = Tween.make_tween ~-.40.0 225.0 Easers.bounce ball.y
+let ty = Tween.make_tween ~-.40.0 225.0 Easers.bounce 1.0 ball.y
 let tm = Tween.new_manager ()
 
 let setup () =

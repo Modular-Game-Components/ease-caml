@@ -7,9 +7,10 @@
 (** The fundamental `tween` type. *)
 type tween
 
-(** Creates a tween. Takes a start value, end value, an easing function and also
-    a reference to a value that will be ultimately changed by the tween. *)
-val make_tween : float -> float -> (float -> float) -> float ref -> tween
+(** Creates a tween. Takes a start value, end value, an easing function, a 
+    duration also a reference to a value that will be ultimately changed by the 
+    tween. *)
+val make_tween : float -> float -> (float -> float) -> float -> float ref -> tween
 
 
 (** A `tween_manager` is in charge of updating a collection of tweens in a game

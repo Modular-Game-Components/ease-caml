@@ -6,6 +6,7 @@ type tween_node =
   mutable progress: float;
   repeat: int;
   mutable cur_repeat: int;
+  duration: float;
   obj: float ref;
 }
 
@@ -19,7 +20,7 @@ type tween = Node of tween_node
 
 type tween_manager = tween list ref
 
-let make_tween_node (sv: float) (ev: float) (ef: float -> float) (obj: float ref) = {
+let make_tween_node (sv: float) (ev: float) (ef: float -> float) (d: float) (obj: float ref) = {
   start_val = sv;
   end_val = ev;
   progress = 0.0;
@@ -27,10 +28,11 @@ let make_tween_node (sv: float) (ev: float) (ef: float -> float) (obj: float ref
   obj = obj;
   repeat = 1;
   cur_repeat = 0;
+  duration = d;
 }
 
-let make_tween (sv: float) (ev: float) (ef: float -> float) (obj: float ref) : tween =
-  let tween_node = make_tween_node sv ev ef obj in 
+let make_tween (sv: float) (ev: float) (ef: float -> float) (d: float) (obj: float ref) : tween =
+  let tween_node = make_tween_node sv ev ef d obj in 
   Node tween_node
 
 let repeat (t: tween) (count: int) = match t with
@@ -41,6 +43,7 @@ let repeat (t: tween) (count: int) = match t with
                 end_val = t.end_val;
                 ease_func = t.ease_func;
                 progress = 0.0;
+                duration = t.duration;
                 obj = t.obj;
               }
   | Nested t -> Nested {
@@ -60,10 +63,11 @@ let update_node (node: tween_node) (dt: float) : unit =
     | true -> node.progress <- 0.0; 
               node.cur_repeat <- node.cur_repeat + 1;
               node.obj := node.start_val
-    | false ->  let p = node.ease_func (node.progress +. dt) in
+    | false ->  let dur = node.duration in
+                let p = node.ease_func (node.progress +. (dt /. dur)) in
                 let sv = node.start_val in
                 let ev = node.end_val in 
-                node.progress <- node.progress +. dt;
+                node.progress <- node.progress +. (dt /. dur);
                 node.obj := (1.0 -. p) *. sv +. p *. ev
 
 let rec reset_tween (t: tween) = match t with
@@ -108,6 +112,7 @@ let empty_tween =
   progress = 0.0;
   repeat = 1;
   cur_repeat = 0;
+  duration = 0.0;
   obj = dummy;
 } 
 
