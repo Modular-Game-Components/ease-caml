@@ -1,13 +1,32 @@
-type tween_node
+(** Datatypes and functions used to make tweens. Tweens are used to continuously
+    change one float value to another float value over time. See 
+    `examples/simple_tween.ml` for a simple example of how this is done in 
+    conjunction with the Raylib game library. For common continuous functions 
+    used to change the values over time, see the `lib/easers.mli`. *)
+
+(** The fundamental `tween` type. *)
 type tween
 
+(** Creates a tween. Takes a start value, end value, an easing function and also
+    a reference to a value that will be ultimately changed by the tween. *)
+val make_tween : float -> float -> (float -> float) -> float ref -> tween
+
+
+(** A `tween_manager` is in charge of updating a collection of tweens in a game
+    loop. See `example/simple_tween.ml` for how the tween_manager is used in the
+    Raylib game loop. *)
 type tween_manager = tween list ref
 
-val make_tween : float -> float -> (float -> float) -> float ref -> tween
-val repeat : tween -> int -> tween
+(** Create a new tween manager *)
+val new_manager : unit -> tween_manager
 
-val update_tween : tween -> float -> unit
+(** Adds a tween to a particular tween_manager. *)
+val add : tween -> tween_manager -> unit
+
+(** Updates the values of the tweens that a particular tween_manager manages. *)
 val update : tween_manager -> float -> unit
 
-val new_manager : unit -> tween_manager
-val add : tween -> tween_manager -> unit
+(** Takes a tween and creates a new tween that repeats the contents of the 
+    original tween a number of times. If the number supplied is `~-1`, then
+    the tween generated will repeat the original tween indefinitely. *)
+val repeat : tween -> int -> tween
