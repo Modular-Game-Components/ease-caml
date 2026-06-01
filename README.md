@@ -13,12 +13,13 @@ let setup () =
 
 let rec loop () =
   if Raylib.window_should_close () then Raylib.close_window ()
-  else
+  else (
     let open Raylib in
     begin_drawing ();
     clear_background Color.raywhite;
     end_drawing ();
     loop ()
+  )
 
 let () = setup () |> loop
 ```
@@ -61,7 +62,7 @@ Tween.add ty tm
 `ty` will be in charge changing the `y` value. To make `ty` do work right below `let open Raylib in` add
 
 ```ocaml
-Tween.update_tween ty (Raylib.get_frame_time ());
+Tween.update_tween ty (get_frame_time ());
 ```
 
 Then after the `clear_background Color.raywhite;` add
@@ -88,17 +89,17 @@ let tm = Tween.new_manager ()
 
 let setup () =
   Raylib.init_window 800 450 "simple_tween";
-  Raylib.set_target_fps 60
+  Raylib.set_target_fps 60;
   Tween.add ty tm
 
 let rec loop () =
   if Raylib.window_should_close () then Raylib.close_window ()
   else
     let open Raylib in
-    Tween.update_tween ty (Raylib.get_frame_time ());
+    Tween.update_tween ty (get_frame_time ());
     begin_drawing ();
     clear_background Color.raywhite;
-    draw_circle_v (Raylib.Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
+    draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
     end_drawing ();
     loop ()
 
