@@ -5,7 +5,7 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github Modular-Game-Components/ease-caml))
 
 (authors "Christopher Sumnicht <csumnicht@berkeley.edu>")
 
@@ -21,6 +21,6 @@
  (description "A longer description")
  (depends ocaml)
  (tags
-  ("game" "easing")))
+  ("game" "easing" "tween")))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html
