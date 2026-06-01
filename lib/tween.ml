@@ -90,7 +90,7 @@ let rec tween_finished (t: tween) = match t with
 
 let rec update_flat_tween (t: flat_tween) (dt: float) : unit =
   if not (node_finished t.tweens.(t.index)) then update_node t.tweens.(t.index) dt
-  else if t.index < Array.length t.tweens then t.index <- t.index + 1
+  else if t.index < Array.length t.tweens - 1 then t.index <- t.index + 1
   else if should_restart_flat t then begin
     t.index <- 0;
     t.cur_repeat <- t.cur_repeat + 1;
@@ -103,7 +103,7 @@ let rec update_flat_tween (t: flat_tween) (dt: float) : unit =
 
 let rec update_tween (t: tween) (dt: float) : unit = match t with
   | Flat t -> update_flat_tween t dt
-  | Nested t -> if t.index <> Array.length t.tweens then update_tween t.tweens.(t.index) dt
+  | Nested t -> if t.index < Array.length t.tweens then update_tween t.tweens.(t.index) dt
   else if should_restart (Nested t) then begin 
     t.index <- 0;
     Array.iter reset_tween t.tweens;
