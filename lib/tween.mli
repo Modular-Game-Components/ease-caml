@@ -42,3 +42,10 @@ val combine : tween list -> tween
 
 (** Shorthand binary operation for `extend` *)
 val ( $> ) : tween -> tween -> tween
+
+(** Set the callback function for a tween. That is a function that is called
+    after the tween finishes execution. *)
+val set_callback : tween -> (unit -> unit) -> unit
+
+(** Shorthand binary operation for `set_callback` *)
+val ( $+ ) : tween -> (unit -> unit) -> unit

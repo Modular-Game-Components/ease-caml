@@ -8,6 +8,7 @@ type tween_node =
   mutable cur_repeat: int;
   duration: float;
   obj: float ref;
+  mutable callback : unit -> unit;
 }
 
 type tween = Node of tween_node
@@ -15,7 +16,8 @@ type tween = Node of tween_node
              tween_left: tween;
              tween_right: tween;
              repeat: int;
-             mutable cur_repeat : int
+             mutable cur_repeat : int;
+             mutable callback: unit -> unit
            } 
 
 type tween_manager = tween list ref
@@ -29,6 +31,7 @@ let make_tween_node (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float
   repeat = 1;
   cur_repeat = 0;
   duration = d;
+  callback = fun () -> ();
 }
 
 let make_tween (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float -> float = (fun x -> x)) (d: float) : tween =
@@ -45,12 +48,14 @@ let repeat (t: tween) (count: int) = match t with
                 progress = 0.0;
                 duration = t.duration;
                 obj = t.obj;
+                callback = t.callback;
               }
   | Nested t -> Nested {
                   repeat = count;
                   cur_repeat = 0;
                   tween_left = t.tween_left;
                   tween_right = t.tween_right;
+                  callback = t.callback;
                 }
 
 let should_restart_node (tn: tween_node) = 
@@ -62,13 +67,15 @@ let update_node (node: tween_node) (dt: float) : unit =
   match should_restart_node node with
     | true -> node.progress <- 0.0; 
               node.cur_repeat <- node.cur_repeat + 1;
-              node.obj := node.start_val
-    | false ->  let dur = node.duration in
-                let p = node.ease_func (node.progress +. (dt /. dur)) in
-                let sv = node.start_val in
-                let ev = node.end_val in 
-                node.progress <- node.progress +. (dt /. dur);
-                node.obj := (1.0 -. p) *. sv +. p *. ev
+              node.obj := node.start_val;
+              if node_finished node then node.callback () else ()
+    | false ->   let dur = node.duration in
+                 let p = node.ease_func (node.progress +. (dt /. dur)) in
+                 let sv = node.start_val in
+                 let ev = node.end_val in
+                 node.progress <- node.progress +. (dt /. dur);
+                 node.obj := (1.0 -. p) *. sv +. p *. ev;
+                 if node_finished node then node.callback () else ()
 
 let rec reset_tween (t: tween) = match t with
   | Node t -> t.cur_repeat <- 0; 
@@ -91,7 +98,8 @@ let rec update_tween (t: tween) (dt: float) : unit = match t with
     else if (t.cur_repeat < t.repeat - 1 || t.repeat = -1) then begin
       t.cur_repeat <- t.cur_repeat + 1;
       reset_tween (Nested t)
-    end
+    end (* Tween is finished, call callback! *)
+    else t.callback ()
 
 let extend (t1: tween) (t2: tween) =
   Nested {
@@ -99,6 +107,7 @@ let extend (t1: tween) (t2: tween) =
     tween_right = t2;
     repeat = 1;
     cur_repeat = 0;
+    callback = fun () -> ()
   }
 
 let ( $> ) = extend
@@ -114,6 +123,7 @@ let empty_tween =
   cur_repeat = 0;
   duration = 0.0;
   obj = dummy;
+  callback = (fun () -> ());
 } 
 
 let rec combine (tweens: tween list) : tween = match tweens with
@@ -124,11 +134,19 @@ let rec combine (tweens: tween list) : tween = match tweens with
               tween_right = combine t;
               repeat = 1;
               cur_repeat = 0;
+              callback = fun () -> ();
             }
+
+let set_callback (t: tween) (f: unit -> unit) = match t with
+  | Node t -> t.callback <- f
+  | Nested t -> t.callback <- f
+
+let ( $+ ) = set_callback
 
 let update (tm: tween_manager) (dt: float) : unit =
   List.iter (fun x -> update_tween x dt) !tm;
   tm := List.filter (fun x -> not (is_finished x)) !tm
+
 
 let new_manager () : tween_manager = ref []
 
