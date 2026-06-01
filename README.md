@@ -94,7 +94,7 @@ let setup () =
 
 let rec loop () =
   if Raylib.window_should_close () then Raylib.close_window ()
-  else
+  else (
     let open Raylib in
     Tween.update_tween ty (get_frame_time ());
     begin_drawing ();
@@ -102,6 +102,7 @@ let rec loop () =
     draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
     end_drawing ();
     loop ()
+  )
 
 let () = setup () |> loop
 ```
