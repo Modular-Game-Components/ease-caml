@@ -84,6 +84,10 @@ let rec update_tween (t: tween) (dt: float) : unit = match t with
       update_tween t.tween_left dt
     else if not (is_finished t.tween_right) then
       update_tween t.tween_right dt
+    else if (t.cur_repeat < t.repeat - 1 || t.repeat = -1) then begin
+      t.cur_repeat <- t.cur_repeat + 1;
+      reset_tween (Nested t)
+    end
 
 let extend (t1: tween) (t2: tween) =
   Nested {
