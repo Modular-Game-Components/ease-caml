@@ -36,6 +36,7 @@ jobs:
       - name: Build docs
         run: |
           eval $(opam config env)
+          opam install odoc
           dune build @doc
       - name: Setup Pages
         uses: actions/configure-pages@v5
