@@ -1,6 +1,6 @@
 (** Datatypes and functions used to make tweens. Tweens are used to continuously
     change one float value to another float value over time. See 
-    `examples/simple_tween.ml` for a simple example of how this is done in 
+    [examples/simple_tween.ml] for a simple example of how this is done in 
     conjunction with the Raylib game library. For common continuous functions 
     used to change the values over time, see the [Easers]. *)
 
