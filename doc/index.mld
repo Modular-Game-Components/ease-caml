@@ -116,6 +116,20 @@ To make the ball bounce, we
 
 You will likely need far fewer managers than tweens so most of the time will be spent on the first two steps.
 
+{2 When You're Done With A Tween}
+
+Your ball has bounced, now you want to move on and resume executing something else for your game. This can be done with a [callback]. A [callback : unit -> unit] is a field for your tween that executes {i once the tween has finished.} For instance, after the ball has bounced, we may want to finish the game. In the [setup] function add
+
+{[
+  Tween.set_callback ty (fun () -> print_endline "Game over!")
+]}
+
+The ball will bounce, then the console will print [Game over!]. Alternatively, instead of [Tween.set_callback], you could use the binary operator [$+]. That is
+
+{[
+  ty $+ (fun () -> print_endline "Game over!")
+]}
+
 {1 Sophisticated Tweens}
 
 {2 Chaining Tweens}
