@@ -17,7 +17,7 @@
 
 (package
  (name ease-caml)
- (version 0.1.3)
+ (version 0.1.5)
  (synopsis "A easing/tweening library for OCaml")
  (description "A tween transitions a float from one value to another over time using an easing function. This is useful for creating animations in games. ease-caml provides game framework agnostic methods to easily create tweens and manage them.")
  (depends 
