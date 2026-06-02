@@ -104,3 +104,93 @@ let () = setup () |> loop
 ]}
 
 Running this code should result in a ball bouncing on the screen.
+
+{2 Recap}
+
+To make the ball bounce, we
+
+- Create a [circle] type.
+- Specify a tween to operate on the [circle] type.
+- Add a tween manager and add the tween to the tween manager.
+- Update the tween manager.
+
+You will likely need far fewer managers than tweens so most of the time will be spent on the first two steps.
+
+{1 Sophisticated Tweens}
+
+{2 Chaining Tweens}
+
+Suppose we want a ball that moves back and forth. Referring to the previous example, instead of
+
+{[
+type circle =
+{
+  r: float;
+  x: float;
+  y: float ref;
+}
+
+let ball : circle = { r = 40.0; x = 400.0; y = ref (0.0 -. 40.0) }
+let ty = Tween.make_tween ball.y 225.0 ~ef:Easers.bounce 1.0
+]}
+
+We change it to
+
+{[
+type circle =
+{
+  r: float;
+  x: float ref;
+  y: float;
+}
+
+let ball : circle = { r = 40.0; x = ref 200.0; y = 225.0 }
+let left = Tween.make_tween ball.x 600.0 ~ef:Easers.quad 1.0
+let right = Tween.make_tween ball.x ~sv:600.0 200.0 ~ef:Easers.quad 1.0
+]}
+
+Let's analyze whats been changed:
+
+- We now are interested in changing the [x] field so we make [x: float ref].
+- The start coordinates of the ball are different: The ball is now centered vertically and slightly to the left of center.
+- [left] should make the ball move from left to right.
+- [right] should make the ball move from right to left.
+
+{3 The Wrong Way}
+
+It might be tempting to put
+
+{[
+  Tween.add left tm
+  Tween.add right tm
+]}
+
+But this will not work because it will run both tweens [left] and [right] at the same time for each iteration of the game loop. We need to perform [left] then [right]. 
+
+{3 The Right Way}
+
+We now address this issue. To do so we make a new tween:
+
+{[
+let left_right = Tween.extend left right
+]}
+
+The [Tween.extend a b] makes a tween that first performs [a] and then follows it with [b]. Thus, running this will cause the ball to move from left to right then right to left. (Alternatively, [extend] is equivalent to the binary operator [$>], so you could do [let left_right = left $> right].)
+
+{2 Rinse and Repeat}
+
+You might want to repeat this left-to-right-right-to-left animation over and over again. You could make a bunch of tweens to do this, but [ease-caml] provides a [repeat a n] function to do this automatically for you. To do so, we make yet another tween
+
+{[
+let repeat = Tween.repeat left_right 2
+]}
+
+This will repeat the left-to-right-right-to-left animation twice. By changing [2] you can change the number of times the tween repeats. Furthermore, if you want to repeat this indefinitely, you may supply a value of -1. That is,
+
+{[
+let repeat = Tween.repeat left_right ~-1
+]}
+
+{1 API}
+
+{!modules: Tween Easers}

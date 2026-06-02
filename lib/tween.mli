@@ -2,7 +2,7 @@
     change one float value to another float value over time. See 
     `examples/simple_tween.ml` for a simple example of how this is done in 
     conjunction with the Raylib game library. For common continuous functions 
-    used to change the values over time, see the `lib/easers.mli`. *)
+    used to change the values over time, see the [Easers]. *)
 
 (** The fundamental `tween` type. *)
 type tween
