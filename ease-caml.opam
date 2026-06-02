@@ -12,7 +12,7 @@ doc: "https://modular-game-components.github.io/ease-caml/"
 bug-reports: "https://github.com/Modular-Game-Components/ease-caml/issues"
 depends: [
   "dune" {>= "3.23"}
-  "ocaml"
+  "ocaml" {>= "5.0.0"}
   "odoc" {with-doc}
 ]
 build: [
