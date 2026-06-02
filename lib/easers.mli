@@ -1,3 +1,6 @@
+(** A collection of common easing functions for tweens adapted to OCaml from
+    https://easings.net/ *)
+ 
 val linear : float -> float
 val quad : float -> float
 val cubic : float -> float
