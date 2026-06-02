@@ -1,6 +1,6 @@
 {0 ease-caml Documentation}
 
-[ease-caml] is a generic library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function. Tweens are a common method for animating entities in games. [ease-caml] provides mechanisms for easily creating and managing the tweens in your favorite OCaml game framework.
+[ease-caml] is a game framework agnositc library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function. Tweens are a common method for animating entities in games. [ease-caml] provides mechanisms for easily creating and managing the tweens in your favorite OCaml game framework.
 
 {1 A Simple Example}
 

@@ -1,6 +1,6 @@
 # ease-caml
 
-A generic library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function.
+A game framework agnostic library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function.
 
 # Example
 
