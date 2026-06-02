@@ -21,6 +21,6 @@
  (description "A longer description")
  (depends ocaml)
  (tags
-  ("game" "easing" "tween")))
+  ("game" "easing" "tween" "animation")))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html
