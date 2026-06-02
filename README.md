@@ -113,3 +113,7 @@ This will make a red ball bounce on the screen. This is `example/simple_tween.ml
 dune build
 dune exec -- ./examples/simple_tween.exe
 ```
+
+# Documentation
+
+Further documentation can be found [here.](https://modular-game-components.github.io/ease-caml/)
