@@ -1,8 +1,8 @@
 (** Datatypes and functions used to make tweens. Tweens are used to continuously
     change one float value to another float value over time. See 
-    [examples/simple_tween.ml] for a simple example of how this is done in 
+    {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[examples/simple_tween.ml]} for a simple example of how this is done in 
     conjunction with the Raylib game library. For common continuous functions 
-    used to change the values over time, see the [Easers]. *)
+    used to change the values over time, see the [Easers] module. *)
 
 (** The fundamental [tween] type. *)
 type tween
@@ -14,8 +14,9 @@ val make_tween : float ref -> ?sv:float -> float -> ?ef:(float -> float) -> floa
 
 
 (** A [tween_manager] is in charge of updating a collection of tweens in a game
-    loop. See `example/simple_tween.ml` for how the [tween_manager] is used in 
-    the Raylib game loop. *)
+    loop. See 
+    {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[example/simple_tween.ml]} for how the [tween_manager] is used
+    in the Raylib game loop. *)
 type tween_manager = tween list ref
 
 (** Create a new tween manager *)
@@ -29,7 +30,7 @@ val add : tween -> tween_manager -> unit
 val update : tween_manager -> float -> unit
 
 (** Takes a tween and creates a new tween that repeats the contents of the 
-    original tween a number of times. If the number supplied is `~-1`, then
+    original tween a number of times. If the number supplied is [~-1], then
     the tween generated will repeat the original tween indefinitely. *)
 val repeat : tween -> int -> tween
 
