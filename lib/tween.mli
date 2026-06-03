@@ -14,17 +14,18 @@ val make_tween : float ref -> ?sv:float -> float -> ?ef:(float -> float) -> floa
 
 
 (** A [tween_manager] is in charge of updating a collection of tweens in a game
-    loop. See `example/simple_tween.ml` for how the tween_manager is used in the
-    Raylib game loop. *)
+    loop. See `example/simple_tween.ml` for how the [tween_manager] is used in 
+    the Raylib game loop. *)
 type tween_manager = tween list ref
 
 (** Create a new tween manager *)
 val new_manager : unit -> tween_manager
 
-(** Adds a tween to a particular tween_manager. *)
+(** Adds a tween to a particular [tween_manager]. *)
 val add : tween -> tween_manager -> unit
 
-(** Updates the values of the tweens that a particular tween_manager manages. *)
+(** Updates the values of the tweens that a particular [tween_manager] 
+    manages. *)
 val update : tween_manager -> float -> unit
 
 (** Takes a tween and creates a new tween that repeats the contents of the 
