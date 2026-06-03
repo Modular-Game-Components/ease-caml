@@ -4,7 +4,7 @@
     conjunction with the Raylib game library. For common continuous functions 
     used to change the values over time, see the [Easers]. *)
 
-(** The fundamental `tween` type. *)
+(** The fundamental [tween] type. *)
 type tween
 
 (** Creates a tween. Takes a start value, end value, an easing function, a 
@@ -13,7 +13,7 @@ type tween
 val make_tween : float ref -> ?sv:float -> float -> ?ef:(float -> float) -> float -> tween
 
 
-(** A `tween_manager` is in charge of updating a collection of tweens in a game
+(** A [tween_manager] is in charge of updating a collection of tweens in a game
     loop. See `example/simple_tween.ml` for how the tween_manager is used in the
     Raylib game loop. *)
 type tween_manager = tween list ref
@@ -32,7 +32,7 @@ val update : tween_manager -> float -> unit
     the tween generated will repeat the original tween indefinitely. *)
 val repeat : tween -> int -> tween
 
-(** Take a tween and return a tween that plays the first tween *then* the
+(** Take a tween and return a tween that plays the first tween {i then} the
     second. *)
 val extend : tween -> tween -> tween
 
@@ -40,12 +40,12 @@ val extend : tween -> tween -> tween
     order. *)
 val combine : tween list -> tween
 
-(** Shorthand binary operation for `extend` *)
+(** Shorthand binary operation for [extend] *)
 val ( $> ) : tween -> tween -> tween
 
-(** Set the callback function for a tween. That is a function that is called
-    after the tween finishes execution. *)
+(** Set the callback function for a tween. The callback function that is called
+    {i after} the tween finishes execution. *)
 val set_callback : tween -> (unit -> unit) -> unit
 
-(** Shorthand binary operation for `set_callback` *)
+(** Shorthand binary operation for [set_callback] *)
 val ( $+ ) : tween -> (unit -> unit) -> unit
