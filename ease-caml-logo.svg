@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <!-- ease-caml logo: ease-in-out curve, OCaml orange, curve centered in axis grid -->
+
+  <rect x="4" y="4" width="152" height="152" rx="28" fill="#2B2118"/>
+
+  <!-- axes -->
+  <line x1="36" y1="34" x2="36" y2="126" stroke="#6B5B4E" stroke-width="3" stroke-linecap="round"/>
+  <line x1="36" y1="126" x2="128" y2="126" stroke="#6B5B4E" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- the ease-in-out curve, centered within the axis square -->
+  <path d="M46,114 C 72,114 88,46 118,46"
+        fill="none" stroke="#EC6813" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- start/end points on the curve -->
+  <circle cx="46" cy="114" r="5.5" fill="#EC6813" stroke="#2B2118" stroke-width="1.5"/>
+  <circle cx="118" cy="46" r="5.5" fill="#EC6813" stroke="#2B2118" stroke-width="1.5"/>
+</svg>
