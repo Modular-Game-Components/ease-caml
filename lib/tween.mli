@@ -25,7 +25,7 @@ val repeat : tween -> int -> tween
 
 (** Take a tween and return a tween that plays the first tween {i then} the
     second. *)
-val extend : tween -> tween -> tween
+val extends : tween -> tween -> tween
 
 (** Take a list of tweens and return a tween that plays each supplied tween in
     order. *)
@@ -56,6 +56,9 @@ val new_manager : unit -> tween_manager
 
 (** Adds a tween to a particular [tween_manager]. *)
 val add : tween -> tween_manager -> unit
+
+(** Adds a list of tweens to a particular [tween_manager]. *)
+val extend : tween list -> tween_manager -> unit
 
 (** Updates the values of the tweens that a particular [tween_manager] manages. *)
 val update : tween_manager -> float -> unit

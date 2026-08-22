@@ -101,7 +101,7 @@ let rec update_tween (t: tween) (dt: float) : unit = match t with
     end (* Tween is finished, call callback! *)
     else t.callback ()
 
-let extend (t1: tween) (t2: tween) =
+let extends (t1: tween) (t2: tween) =
   Nested {
     tween_left = t1;
     tween_right = t2;
@@ -110,7 +110,7 @@ let extend (t1: tween) (t2: tween) =
     callback = fun () -> ()
   }
 
-let ( $> ) = extend
+let ( $> ) = extends
 
 let dummy = ref 0.0
 let empty_tween =
@@ -152,3 +152,8 @@ let new_manager () : tween_manager = ref []
 
 let add (t: tween) (tm: tween_manager) : unit =
   tm := !tm @ [t]
+
+let rec extend (tws: tween list) (tm: tween_manager) : unit =
+  match tws with
+  | [] -> ()
+  | h :: t -> add h tm; extend t tm
