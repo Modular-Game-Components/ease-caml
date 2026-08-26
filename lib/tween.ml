@@ -1,24 +1,34 @@
-type tween_node =
+let repeat_n (seq: 'a Seq.t) (n: int) : ('a Seq.t) = 
+  match n with
+  | (-1) -> Seq.concat (Seq.repeat seq)
+  | _ -> Seq.take n (Seq.concat (Seq.repeat seq))
+
+let safe_next (seq: 'a Seq.t): 'a option * 'a Seq.t =
+  match Seq.uncons seq with
+      | Some (h, t) -> (Some h, t)
+      | None -> (None, Seq.empty)
+
+type tween_leaf =
 {
   start_val: float;
   end_val: float;
   ease_func: float -> float;
   mutable progress: float;
-  repeat: int;
-  mutable cur_repeat: int;
   duration: float;
   obj: float ref;
   mutable callback : unit -> unit;
+  mutable parent: tween_interior option;
 }
-
-type tween = Node of tween_node
-           | Nested of {
-             tween_left: tween;
-             tween_right: tween;
-             repeat: int;
-             mutable cur_repeat : int;
-             mutable callback: unit -> unit
-           } 
+and tween_interior =
+{
+  children: tween list;
+  repeat: int;
+  mutable callback: unit -> unit;
+  mutable seq: tween Seq.t;
+  mutable cur: tween option;
+  mutable parent: tween_interior option;
+}
+and tween = Node of tween_leaf | Nested of tween_interior
 
 type tween_manager = tween list ref
 
@@ -28,10 +38,9 @@ let make_tween_node (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float
   progress = 0.0;
   ease_func = ef;
   obj = obj;
-  repeat = 1;
-  cur_repeat = 0;
   duration = d;
-  callback = fun () -> ();
+  callback = (fun () -> ());
+  parent = None;
 }
 
 let make_tween (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float -> float = (fun x -> x)) (d: float) : tween =
@@ -39,76 +48,94 @@ let make_tween (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float -> f
   Node tween_node
 
 let repeat (t: tween) (count: int) = match t with
-  | Node t -> Node {
+  | Node tn -> let new_seq = repeat_n (List.to_seq [Node tn]) count in
+               let head, tail = safe_next new_seq in
+               let new_tween = {
                 repeat = count;
-                cur_repeat = 0;
-                start_val = t.start_val;
-                end_val = t.end_val;
-                ease_func = t.ease_func;
-                progress = 0.0;
-                duration = t.duration;
-                obj = t.obj;
-                callback = t.callback;
-              }
-  | Nested t -> Nested {
+                children = [t];
+                callback = tn.callback;
+                parent = tn.parent;
+                seq = tail;
+                cur = head;
+              } in
+              tn.parent <- Some new_tween;
+              Nested new_tween
+  | Nested t -> let new_seq = repeat_n (List.to_seq t.children) count in
+                let head, tail = safe_next new_seq in
+                let new_tween = {
                   repeat = count;
-                  cur_repeat = 0;
-                  tween_left = t.tween_left;
-                  tween_right = t.tween_right;
+                  children = t.children;
                   callback = t.callback;
-                }
+                  seq = tail;
+                  cur = head;
+                  parent = None;
+                } in
+                List.iter (fun c -> 
+                  (match c with
+                  | Node x -> x.parent <- Some new_tween
+                  | Nested x -> x.parent <- Some new_tween)) t.children;
+                Nested new_tween
+  
+let node_finished (tn: tween_leaf) = tn.progress >= 1.0
 
-let should_restart_node (tn: tween_node) = 
-        tn.progress >= 1.0 && (tn.cur_repeat < tn.repeat - 1 || tn.repeat = -1)
-let node_finished (tn: tween_node) = tn.progress >= 1.0 
-                                  && tn.cur_repeat = tn.repeat - 1
-
-let update_node (node: tween_node) (dt: float) : unit =
-  match should_restart_node node with
-    | true -> node.progress <- 0.0; 
-              node.cur_repeat <- node.cur_repeat + 1;
-              node.obj := node.start_val;
-              if node_finished node then node.callback () else ()
-    | false ->   let dur = node.duration in
-                 let p = node.ease_func (node.progress +. (dt /. dur)) in
-                 let sv = node.start_val in
-                 let ev = node.end_val in
-                 node.progress <- node.progress +. (dt /. dur);
-                 node.obj := (1.0 -. p) *. sv +. p *. ev;
-                 if node_finished node then node.callback () else ()
+let update_leaf (node: tween_leaf) (dt: float) : unit =
+  let dur = node.duration in
+  let p = node.ease_func (node.progress +. (dt /. dur)) in
+  let sv = node.start_val in
+  let ev = node.end_val in
+  node.progress <- node.progress +. (dt /. dur);
+  node.obj := (1.0 -. p) *. sv +. p *. ev;
+  if node_finished node then node.callback () else ()
 
 let rec reset_tween (t: tween) = match t with
-  | Node t -> t.cur_repeat <- 0; 
-              t.progress <- 0.0;
-  | Nested t -> t.cur_repeat <- 0;
-                reset_tween t.tween_left;
-                reset_tween t.tween_right
+  | Node t -> t.progress <- 0.0
+  | Nested t -> 
+    let new_seq = repeat_n (List.to_seq t.children) t.repeat in
+    let head, tail = safe_next new_seq in
+    t.seq <- tail;
+    t.cur <- head;
+    List.iter reset_tween t.children
 
 let rec is_finished (t: tween) : bool = match t with
   | Node t -> node_finished t 
-  | Nested t -> (t.cur_repeat = t.repeat && t.repeat <> ~-1) 
-              && is_finished t.tween_right
+  | Nested t -> t.cur = None
+
+let rec update_cur_tween (t: tween option) (dt: float) : unit =
+  match t with
+  | Some (Node tn) -> if node_finished tn then
+    (reset_tween (Node tn);
+    match tn.parent with
+    | Some p -> 
+        let head, tail = safe_next p.seq in
+        p.seq <- tail;
+        p.cur <- head
+    | None -> ())
+    else (update_leaf tn dt)
+  | Some (Nested tw) -> update_cur_tween tw.cur dt
+  | None -> ()
 
 let rec update_tween (t: tween) (dt: float) : unit = match t with
-  | Node t -> update_node t dt
-  | Nested t -> if not (is_finished t.tween_left) then
-      update_tween t.tween_left dt
-    else if not (is_finished t.tween_right) then
-      update_tween t.tween_right dt
-    else if (t.cur_repeat < t.repeat - 1 || t.repeat = -1) then begin
-      t.cur_repeat <- t.cur_repeat + 1;
-      reset_tween (Nested t)
-    end (* Tween is finished, call callback! *)
-    else t.callback ()
+  | Node tw -> update_leaf tw dt
+  | Nested tw -> update_cur_tween tw.cur dt
 
-let extends (t1: tween) (t2: tween) =
-  Nested {
-    tween_left = t1;
-    tween_right = t2;
+let extends (t1: tween) (t2: tween): tween =
+  let new_seq = List.to_seq [t1 ; t2] in
+  let head, tail = safe_next new_seq in
+  let new_tween = {
+    children = [t1 ; t2];
     repeat = 1;
-    cur_repeat = 0;
-    callback = fun () -> ()
-  }
+    callback = (fun () -> ());
+    seq = tail;
+    cur = head;
+    parent = None
+  } in
+  (match t1 with
+  | Node t -> t.parent <- Some new_tween
+  | Nested t -> t.parent <- Some new_tween);
+  (match t2 with
+  | Node t -> t.parent <- Some new_tween
+  | Nested t -> t.parent <- Some new_tween);
+  Nested new_tween
 
 let ( $> ) = extends
 
@@ -119,23 +146,30 @@ let empty_tween =
   end_val = 0.0;
   ease_func = (fun x -> x);
   progress = 0.0;
-  repeat = 1;
-  cur_repeat = 0;
   duration = 0.0;
   obj = dummy;
   callback = (fun () -> ());
+  parent = None;
 } 
 
 let rec combine (tweens: tween list) : tween = match tweens with
   | [] -> Node empty_tween
   | [a] -> a
-  | h::t -> Nested {
-              tween_left = h;
-              tween_right = combine t;
-              repeat = 1;
-              cur_repeat = 0;
-              callback = fun () -> ();
-            }
+  | _ -> let new_seq = List.to_seq tweens in
+         let head, tail = safe_next new_seq in
+         let new_tween = {
+           children=tweens;
+           repeat = 1;
+           callback = (fun () -> ());
+           seq = tail;
+           cur = head;
+           parent = None;
+         } in
+         List.iter (fun t -> 
+           match t with 
+           | Node x -> x.parent <- Some new_tween 
+           | Nested x -> x.parent <- Some new_tween) tweens;
+         Nested new_tween
 
 let set_callback (t: tween) (f: unit -> unit) = match t with
   | Node t -> t.callback <- f
