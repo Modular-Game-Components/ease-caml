@@ -1,14 +1,19 @@
+(** Utility functions for sequences *)
+
+(* Repeat a sequence n times. If n = -1 then repeat forever. *)
 let repeat_n (seq: 'a Seq.t) (n: int) : ('a Seq.t) = 
   match n with
   | (-1) -> Seq.concat (Seq.repeat seq)
   | _ -> Seq.take n (Seq.concat (Seq.repeat seq))
 
+(* Like Seq.uncons but a little safer. *)
 let safe_next (seq: 'a Seq.t): 'a option * 'a Seq.t =
   match Seq.uncons seq with
       | Some (h, t) -> (Some h, t)
       | None -> (None, Seq.empty)
 
-type tween_leaf =
+(* A primitive tween *)
+type tween_node =
 {
   start_val: float;
   end_val: float;
@@ -19,6 +24,7 @@ type tween_leaf =
   mutable callback : unit -> unit;
   mutable parent: tween_interior option;
 }
+(* A composition of tween leaves (or other tween interiors. *)
 and tween_interior =
 {
   children: tween list;
@@ -28,10 +34,13 @@ and tween_interior =
   mutable cur: tween option;
   mutable parent: tween_interior option;
 }
-and tween = Node of tween_leaf | Nested of tween_interior
+(* An ordered, rooted, n-ary tree. *)
+and tween = Node of tween_node | Nested of tween_interior
 
+(* Called in the update function and updates every tween added to it. *)
 type tween_manager = tween list ref
 
+(* Constructor for a tween. *)
 let make_tween_node (obj: float ref) ?(sv: float = !obj) (ev: float) ?(ef: float -> float = (fun x -> x)) (d: float) = {
   start_val = sv;
   end_val = ev;
@@ -76,9 +85,9 @@ let repeat (t: tween) (count: int) = match t with
                   | Nested x -> x.parent <- Some new_tween)) t.children;
                 Nested new_tween
   
-let node_finished (tn: tween_leaf) = tn.progress >= 1.0
+let node_finished (tn: tween_node) = tn.progress >= 1.0
 
-let update_leaf (node: tween_leaf) (dt: float) : unit =
+let update_leaf (node: tween_node) (dt: float) : unit =
   let dur = node.duration in
   let p = node.ease_func (node.progress +. (dt /. dur)) in
   let sv = node.start_val in
