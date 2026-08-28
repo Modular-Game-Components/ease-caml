@@ -200,3 +200,8 @@ let rec extend (tws: tween list) (tm: tween_manager) : unit =
   match tws with
   | [] -> ()
   | h :: t -> add h tm; extend t tm
+
+let running (tm: tween_manager): bool =
+  match !tm with
+  | [] -> false
+  | _ -> true

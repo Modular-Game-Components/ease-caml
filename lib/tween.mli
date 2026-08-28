@@ -60,5 +60,8 @@ val add : tween -> tween_manager -> unit
 (** Adds a list of tweens to a particular [tween_manager]. *)
 val extend : tween list -> tween_manager -> unit
 
+(** Checks to see if a particular [tween_manager] is currently running any tweens. *)
+val running : tween_manager -> bool
+
 (** Updates the values of the tweens that a particular [tween_manager] manages. *)
 val update : tween_manager -> float -> unit
