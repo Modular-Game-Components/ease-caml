@@ -89,7 +89,7 @@ let node_finished (tn: tween_node) = tn.progress >= 1.0
 
 let update_leaf (node: tween_node) (dt: float) : unit =
   let dur = node.duration in
-  let p = node.ease_func (node.progress +. (dt /. dur)) in
+  let p = min (node.ease_func (node.progress +. (dt /. dur))) 1.0 in
   let sv = node.start_val in
   let ev = node.end_val in
   node.progress <- node.progress +. (dt /. dur);
