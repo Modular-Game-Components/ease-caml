@@ -131,7 +131,14 @@ let rec update_cur_tween (t: tween option) (dt: float) : unit =
     else (match update_leaf tn dt with
           | Some ex -> update_cur_tween t ex
           | None -> ())
-  | Some (Nested tw) -> update_cur_tween tw.cur dt
+  | Some (Nested tw) -> if is_finished (Nested tw) then
+    (match tw.parent with
+    | Some p -> 
+        let head, tail = safe_next p.seq in
+        p.seq <- tail;
+        p.cur <- head
+    | None -> ())
+    else update_cur_tween tw.cur dt
   | None -> ()
 
 let rec update_tween (t: tween) (dt: float) : unit = match t with
