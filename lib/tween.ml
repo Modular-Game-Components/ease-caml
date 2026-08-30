@@ -89,18 +89,21 @@ let node_finished (tn: tween_node) = tn.progress >= 1.0
 
 let excess (p: float) =
   let ex = 1.0 -. p in
-  if ex < 0.0 then Some ex else None
+  if ex <= 0.0 then Some ex else None
 
 let update_leaf (node: tween_node) (dt: float) : float option =
   let dur = node.duration in
-  let p = (node.ease_func (node.progress +. (dt /. dur))) in
+  let p = (node.progress +. (dt /. dur)) in
   let ex = excess p in
   let np = min p 1.0 in
+  let efp = (node.ease_func np) in
   let sv = node.start_val in
   let ev = node.end_val in
   node.progress <- node.progress +. (dt /. dur);
-  node.obj := (1.0 -. np) *. sv +. np *. ev;
-  ex
+  node.obj := (1.0 -. efp) *. sv +. efp *. ev;
+  match ex with
+  | None -> None
+  | Some x -> node.callback(); Some x
 
 let rec reset_tween (t: tween) = match t with
   | Node t -> t.progress <- 0.0
