@@ -96,12 +96,17 @@ let test_bounce () =
   check_float "bounce 0.0" 0.0 (f 0.0) ;
   (* First parabolic arc: n *. x^2 for x < 1/2.5. *)
   check_float "bounce 0.2" 0.3025 (f 0.2) ;
-  (* Bounces should land back near 1.0 at the end. *)
-  Alcotest.check rough_float "bounce ends near 1.0" 1.0 (f 1.0) ;
-  (* Bounce is not monotonic, but never undershoots 0. *)
-  List.iter
-    (fun x -> Alcotest.check rough_float "bounce is nonnegative" 0.0 (min 0.0 (f x)))
-    [ 0.0; 0.1; 0.2; 0.3; 0.4; 0.5; 0.6; 0.7; 0.8; 0.9; 1.0 ]
+  (* The last arc must land exactly on 1.0, or a tween using [bounce]
+     overshoots its end value. *)
+  check_float "bounce 1.0" 1.0 (f 1.0) ;
+  (* Bounce is not monotonic, but it must stay within [0.0, 1.0]: a value
+     above 1.0 would carry the tweened value past its target. *)
+  for i = 0 to 100 do
+    let x = float_of_int i /. 100.0 in
+    let v = f x in
+    Alcotest.check Alcotest.bool "bounce stays within [0, 1]" true
+      (v >= 0.0 && v <= 1.0)
+  done
 
 (* [out] mirrors an ease-in curve into an ease-out curve: [1 - f (1 - x)]. *)
 let test_out () =
