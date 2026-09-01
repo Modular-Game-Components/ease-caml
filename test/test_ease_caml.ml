@@ -103,6 +103,60 @@ let test_bounce () =
     (fun x -> Alcotest.check rough_float "bounce is nonnegative" 0.0 (min 0.0 (f x)))
     [ 0.0; 0.1; 0.2; 0.3; 0.4; 0.5; 0.6; 0.7; 0.8; 0.9; 1.0 ]
 
+(* [out] mirrors an ease-in curve into an ease-out curve: [1 - f (1 - x)]. *)
+let test_out () =
+  let f = Easers.out Easers.quad in
+  check_float "out quad 0.0" 0.0 (f 0.0) ;
+  (* 1 - (1 - 0.5)^2 *)
+  check_float "out quad 0.5" 0.75 (f 0.5) ;
+  check_float "out quad 1.0" 1.0 (f 1.0) ;
+  (* Mirroring a straight line gives back a straight line. *)
+  let l = Easers.out Easers.linear in
+  List.iter
+    (fun x -> check_float "out linear is linear" x (l x))
+    [ 0.0; 0.25; 0.5; 0.75; 1.0 ]
+
+(* [inout] eases in over the first half and out over the second. *)
+let test_inout () =
+  let f = Easers.inout Easers.quad in
+  check_float "inout quad 0.0" 0.0 (f 0.0) ;
+  (* First half is f (2x) / 2, so quad (0.5) / 2. *)
+  check_float "inout quad 0.25" 0.125 (f 0.25) ;
+  (* The two halves must meet in the middle. *)
+  check_float "inout quad 0.5" 0.5 (f 0.5) ;
+  (* Second half is the mirror of the first. *)
+  check_float "inout quad 0.75" 0.875 (f 0.75) ;
+  check_float "inout quad 1.0" 1.0 (f 1.0) ;
+  let l = Easers.inout Easers.linear in
+  List.iter
+    (fun x -> check_float "inout linear is linear" x (l x))
+    [ 0.0; 0.25; 0.5; 0.75; 1.0 ]
+
+(* Both combinators must preserve the endpoint contract and monotonicity for
+   every monotonic easer the library exports. *)
+let test_combinators_preserve_endpoints () =
+  let monotonic_easers =
+    [ ("linear", Easers.linear) ; ("quad", Easers.quad) ; ("cubic", Easers.cubic) ;
+      ("quart", Easers.quart) ; ("quint", Easers.quint) ; ("circ", Easers.circ) ;
+      ("expo", Easers.expo) ]
+  in
+  List.iter
+    (fun (name, e) ->
+      List.iter
+        (fun (label, f) ->
+          check_float (label ^ " " ^ name ^ " 0.0") 0.0 (f 0.0) ;
+          check_float (label ^ " " ^ name ^ " 1.0") 1.0 (f 1.0) ;
+          (* Never decreasing across the domain. *)
+          let prev = ref (f 0.0) in
+          for i = 1 to 100 do
+            let v = f (float_of_int i /. 100.0) in
+            Alcotest.check Alcotest.bool
+              (label ^ " " ^ name ^ " is monotonic") true (v >= !prev -. 1e-12) ;
+            prev := v
+          done)
+        [ ("out", Easers.out e) ; ("inout", Easers.inout e) ])
+    monotonic_easers
+
 let easers_tests =
   [ ("linear", `Quick, test_linear) ;
     ("quad", `Quick, test_quad) ;
@@ -111,7 +165,10 @@ let easers_tests =
     ("quint", `Quick, test_quint) ;
     ("expo", `Quick, test_expo) ;
     ("circ", `Quick, test_circ) ;
-    ("bounce", `Quick, test_bounce) ]
+    ("bounce", `Quick, test_bounce) ;
+    ("out", `Quick, test_out) ;
+    ("inout", `Quick, test_inout) ;
+    ("combinators preserve endpoints", `Quick, test_combinators_preserve_endpoints) ]
 
 (* ---------------------------------------------------------------------- *)
 (* Tween: basic leaves                                                    *)
