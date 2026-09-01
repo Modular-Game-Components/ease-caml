@@ -1,6 +1,6 @@
 {0 ease-caml Documentation}
 
-[ease-caml] is a game framework agnositc library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function. Tweens are a common method for animating entities in games. [ease-caml] provides mechanisms for easily creating and managing the tweens in your favorite OCaml game framework.
+[ease-caml] is a game framework agnostic library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function. Tweens are a common method for animating entities in games. [ease-caml] provides mechanisms for easily creating and managing the tweens in your favorite OCaml game framework.
 
 {1 A Simple Example}
 
@@ -67,6 +67,12 @@ Tween.add ty tm
 
 {[
     Tween.update tm (get_frame_time ());
+]}
+
+Finally, we need to actually draw the ball. Right after [clear_background Color.raywhite;] add:
+
+{[
+    draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
 ]}
 
 All in all you should have:
@@ -175,7 +181,7 @@ Let's analyze whats been changed:
 It might be tempting to put
 
 {[
-  Tween.add left tm
+  Tween.add left tm;
   Tween.add right tm
 ]}
 
@@ -186,10 +192,10 @@ But this will not work because it will run both tweens [left] and [right] at the
 We now address this issue. To do so we make a new tween:
 
 {[
-let left_right = Tween.extend left right
+let left_right = Tween.extends left right
 ]}
 
-The [Tween.extend a b] makes a tween that first performs [a] and then follows it with [b]. Thus, running this will cause the ball to move from left to right then right to left. (Alternatively, [extend] is equivalent to the binary operator [$>], so you could do [let left_right = left $> right].)
+The [Tween.extends a b] makes a tween that first performs [a] and then follows it with [b]. Thus, running this will cause the ball to move from left to right then right to left. (Alternatively, [extends] is equivalent to the binary operator [$>], so you could do [let left_right = left $> right].)
 
 {2 Rinse and Repeat}
 

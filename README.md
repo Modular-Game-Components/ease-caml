@@ -111,7 +111,7 @@ let rec loop () =
 let () = setup () |> loop
 ```
 
-This will make a red ball bounce on the screen. This is `example/simple_tween.ml`. It can be ran by going to the base directory and running:
+This will make a red ball bounce on the screen. This is `examples/simple_tween.ml`. It can be ran by going to the base directory and running:
 
 ```
 dune build
