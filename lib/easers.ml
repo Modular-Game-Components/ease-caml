@@ -28,7 +28,9 @@ let bounce x =
   else if x < 2.5 /. d then n *. y1 ** 2.0 +. 0.9375
   else n *. y2 ** 2.0 +. 0.984375
 
-let inout f =
-  (fun x -> if x < 1.0 then 0.5 *. f (2.0 *. x) else (1.0 -. f (2.0 -. 2.0 *. x)) +. 0.5)
 let out f =
-  (fun x -> (1 - f x))
+  (fun x -> 1.0 -. f (1.0 -. x))
+let inout f =
+  (fun x ->
+    if x < 0.5 then 0.5 *. f (2.0 *. x)
+    else 1.0 -. (0.5 *. f (2.0 -. 2.0 *. x)))
