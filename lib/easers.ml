@@ -19,7 +19,7 @@ let elastic (x : float) : float =
   | _   -> Float.neg (2.0 ** (10.0 *. x -. 10.0)) *. Float.sin((x *. 10.0 -. 10.75) *. c)
 let bounce x = 
   let n = 7.5625 in
-  let d = 2.5 in
+  let d = 2.75 in
   let y0 = x -. 1.5 /. d in
   let y1 = x -. 2.25 /. d in
   let y2 = x -. 2.625 /. d in
