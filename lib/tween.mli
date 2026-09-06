@@ -8,11 +8,11 @@
 
 (** {2 [tween] type} *)
 
-(** A tween is a (continous) change of a real value (in this library a [float ref]) from one value to another over time. *)
+(** A tween is a (continuous) change of a real value (in this library a [float ref]) from one value to another over time. *)
 type tween
 
-(** Creates a tween. Takes a start value, end value, an easing function, a 
-    duration also a reference to a value that will be ultimately changed by the 
+(** Creates a tween. Takes a start value, end value, an easing function, a
+    duration also a reference to a value that will be ultimately changed by the
     tween. *)
 val make_tween : float ref -> ?sv:float -> float -> ?ef:(float -> float) -> float -> tween
 
@@ -31,7 +31,7 @@ val extends : tween -> tween -> tween
     order. *)
 val combine : tween list -> tween
 
-(** Shorthand binary operation for [extend] *)
+(** Shorthand binary operation for [extends] *)
 val ( $> ) : tween -> tween -> tween
 
 (** {3 [tween] callback setters} *)
@@ -46,7 +46,7 @@ val ( $+ ) : tween -> (unit -> unit) -> unit
 (** {2 [tween_manager]} *)
 
 (** A [tween_manager] is in charge of updating a collection of tweens in a game loop. See 
-    {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[example/simple_tween.ml]} for how the [tween_manager] is used in the Raylib game loop. *)
+    {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[examples/simple_tween.ml]} for how the [tween_manager] is used in the Raylib game loop. *)
 type tween_manager = tween list ref
 
 (** {3 [tween_manager] functions} *)
