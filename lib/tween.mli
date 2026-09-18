@@ -4,64 +4,74 @@
     conjunction with the Raylib game library. For common continuous functions 
     used to change the values over time, see the [Easers] module. *)
 
-(** {1 The Main Datastructures} *)
+(** Need something to (left) multiply a [float] with. Usually another [float], but can be a vector of 
+    [floats too for instance. *)
+module type VECTOR = sig
+  type v
+  val ( *. ) : float -> v -> v
+  val ( +. ) : v -> v -> v
+end
 
-(** {2 [tween] type} *)
+module Make (V: VECTOR) : sig
+  (** {1 The Main Datastructures} *)
 
-(** A tween is a (continuous) change of a real value (in this library a [float ref]) from one value to another over time. *)
-type tween
+  (** {2 [tween] type} *)
 
-(** Creates a tween. Takes a start value, end value, an easing function, a
-    duration also a reference to a value that will be ultimately changed by the
-    tween. *)
-val make_tween : float ref -> ?sv:float -> float -> ?ef:(float -> float) -> float -> tween
+  (** A tween is a (continuous) change of a real value (in this library a [float ref]) from one value to another over time. *)
+  type tween
 
-(** {3 [tween] composition methods.} *)
+  (** Creates a tween. Takes a start value, end value, an easing function, a
+      duration also a reference to a value that will be ultimately changed by the
+      tween. *)
+  val make_tween : V.v ref -> ?sv:V.v -> V.v -> ?ef:(float -> float) -> float -> tween
 
-(** Takes a tween and creates a new tween that repeats the contents of the 
-    original tween a number of times. If the number supplied is [~-1], then
-    the tween generated will repeat the original tween indefinitely. *)
-val repeat : tween -> int -> tween
+  (** {3 [tween] composition methods.} *)
 
-(** Take a tween and return a tween that plays the first tween {i then} the
-    second. *)
-val extends : tween -> tween -> tween
+  (** Takes a tween and creates a new tween that repeats the contents of the 
+      original tween a number of times. If the number supplied is [~-1], then
+      the tween generated will repeat the original tween indefinitely. *)
+  val repeat : tween -> int -> tween
 
-(** Take a list of tweens and return a tween that plays each supplied tween in
-    order. *)
-val combine : tween list -> tween
+  (** Take a tween and return a tween that plays the first tween {i then} the
+      second. *)
+  val extends : tween -> tween -> tween
 
-(** Shorthand binary operation for [extends] *)
-val ( $> ) : tween -> tween -> tween
+  (** Take a list of tweens and return a tween that plays each supplied tween in
+      order. *)
+  val combine : tween list -> tween
 
-(** {3 [tween] callback setters} *)
+  (** Shorthand binary operation for [extends] *)
+  val ( $> ) : tween -> tween -> tween
 
-(** Set the callback function for a tween. The callback function that is called
-    {i after} the tween finishes execution. *)
-val set_callback : tween -> (unit -> unit) -> unit
+  (** {3 [tween] callback setters} *)
 
-(** Shorthand binary operation for [set_callback] *)
-val ( $+ ) : tween -> (unit -> unit) -> unit
+  (** Set the callback function for a tween. The callback function that is called
+      {i after} the tween finishes execution. *)
+  val set_callback : tween -> (unit -> unit) -> unit
 
-(** {2 [tween_manager]} *)
+  (** Shorthand binary operation for [set_callback] *)
+  val ( $+ ) : tween -> (unit -> unit) -> unit
 
-(** A [tween_manager] is in charge of updating a collection of tweens in a game loop. See 
-    {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[examples/simple_tween.ml]} for how the [tween_manager] is used in the Raylib game loop. *)
-type tween_manager = tween list ref
+  (** {2 [tween_manager]} *)
 
-(** {3 [tween_manager] functions} *)
+  (** A [tween_manager] is in charge of updating a collection of tweens in a game loop. See 
+      {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[examples/simple_tween.ml]} for how the [tween_manager] is used in the Raylib game loop. *)
+  type tween_manager = tween list ref
 
-(** Create a new tween manager *)
-val new_manager : unit -> tween_manager
+  (** {3 [tween_manager] functions} *)
 
-(** Adds a tween to a particular [tween_manager]. *)
-val add : tween -> tween_manager -> unit
+  (** Create a new tween manager *)
+  val new_manager : unit -> tween_manager
 
-(** Adds a list of tweens to a particular [tween_manager]. *)
-val extend : tween list -> tween_manager -> unit
+  (** Adds a tween to a particular [tween_manager]. *)
+  val add : tween -> tween_manager -> unit
 
-(** Checks to see if a particular [tween_manager] is currently running any tweens. *)
-val running : tween_manager -> bool
+  (** Adds a list of tweens to a particular [tween_manager]. *)
+  val extend : tween list -> tween_manager -> unit
 
-(** Updates the values of the tweens that a particular [tween_manager] manages. *)
-val update : tween_manager -> float -> unit
+  (** Checks to see if a particular [tween_manager] is currently running any tweens. *)
+  val running : tween_manager -> bool
+
+  (** Updates the values of the tweens that a particular [tween_manager] manages. *)
+  val update : tween_manager -> float -> unit
+end
