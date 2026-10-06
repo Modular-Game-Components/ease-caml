@@ -8,13 +8,7 @@
    sequencing ([extends]/[combine]) and repetition ([repeat]). These tests
    exercise both levels through the public interface. *)
 
-module Vector = struct
-  type v = float
-  let ( *. ) = ( *. )
-  let ( +. ) = ( +. )
-end
-
-module FloatTween = Tween.Make(Vector)
+module FloatTween = Tween.FloatTween
 
 
 (* Rebind the infix operators so they can be used without opening the

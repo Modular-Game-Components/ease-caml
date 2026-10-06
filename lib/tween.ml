@@ -237,3 +237,12 @@ module Make (V: VECTOR) = struct
     | [] -> false
     | _ -> true
 end
+
+(* Single float preset *)
+module Single = struct
+  type v = float
+  let ( *. ) = ( *. )
+  let ( +. ) = ( +. )
+end
+
+module FloatTween = Make(Single)
