@@ -4,7 +4,7 @@
 
 # ease-caml
 
-A game framework agnostic library for easing and tweening. A tween takes a floating point value from one value continuously over time to another value via an easing function.
+A game framework agnostic library for easing and tweening. A tween takes a floating point value (or collection thereof) from one value continuously over time to another value via an easing function.
 
 # Example
 
@@ -31,6 +31,8 @@ let () = setup () |> loop
 We will adapt this to have a ball bounce on the screen. First we create a ball just outside the screen (add this to the *top* of the example):
 
 ```ocaml
+module FT = Tween.FloatTween -- For a single floating point value.
+
 type circle =
 {
   r: float;
@@ -80,6 +82,8 @@ to actually draw the ball.
 All in all you should now have:
 
 ```ocaml
+module FT = Tween.FloatTween
+
 type circle =
 {
   r: float;
