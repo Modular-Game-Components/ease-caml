@@ -31,7 +31,7 @@ let () = setup () |> loop
 We will adapt this to have a ball bounce on the screen. First we create a ball just outside the screen (add this to the *top* of the example):
 
 ```ocaml
-module FT = Tween.FloatTween -- For a single floating point value.
+module FT = Tween.FloatTween (* For a single floating point value. *)
 
 type circle =
 {

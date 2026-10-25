@@ -31,7 +31,7 @@ Currently, a white screen is displayed. We will adapt this example to have a bal
 First we create a ball just outside the screen (add this to the top of the example):
 
 {[
-module FT = Tween.FloatTween
+module FT = Tween.FloatTween (* To modify a single floating point value *)
 
 type circle =
 {
