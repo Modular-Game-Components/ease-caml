@@ -1,3 +1,11 @@
+# For Mac
+.DS_Store
+
+# For recordings
+*.gif
+*.mp4
+
+
 *.annot
 *.cmo
 *.cma
@@ -34,3 +42,6 @@ setup.log
 
 # Local OPAM switch
 _opam/
+
+# Per-frame screenshots from the recording example
+frames/
