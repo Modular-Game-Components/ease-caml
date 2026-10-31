@@ -8,6 +8,8 @@ A game framework agnostic library for easing and tweening. A tween takes a float
 
 # Example
 
+https://github.com/user-attachments/assets/03dc5fc6-17c6-4ba7-acfe-e983be9997dc
+
 Consider the following [Raylib Ocaml example](https://github.com/tjammer/raylib-ocaml) that draws a blank screen:
 
 ```ocaml
