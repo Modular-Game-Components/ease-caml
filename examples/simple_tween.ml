@@ -7,7 +7,7 @@ type circle =
   y: float ref;
 }
 
-let ball : circle = { r = 40.0; x = 400.0; y = ref (0.0 -. 40.0) }
+let ball : circle = { r = 40.0; x = 400.0; y = ref ~-.40.0 }
 let ty = FT.make_tween ball.y 225.0 ~ef:Easers.bounce 1.0
 let tm = FT.new_manager ()
 
