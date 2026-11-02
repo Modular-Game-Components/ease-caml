@@ -36,7 +36,7 @@ let rec loop frame =
   let open Raylib in
   begin_drawing ();
   clear_background Color.raywhite;
-  draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
+  draw_circle (Int.of_float ball.x) (Int.of_float !(ball.y)) ball.r Color.maroon;
   end_drawing ();
   (* raylib defers the actual capture to the end of the frame, so this grabs
      exactly one PNG per rendered frame. *)

@@ -20,11 +20,10 @@ let rec loop () =
   if Raylib.window_should_close () then Raylib.close_window ()
   else (
     let open Raylib in
-    let ftoi = Int.of_float in
     FT.update tm (get_frame_time ());
     begin_drawing ();
     clear_background Color.raywhite;
-    draw_circle (ftoi ball.x) (ftoi !(ball.y)) ball.r Color.maroon;
+    draw_circle (Int.of_float ball.x) (Int.of_float !(ball.y)) ball.r Color.maroon;
     end_drawing ();
     loop ()
   )
