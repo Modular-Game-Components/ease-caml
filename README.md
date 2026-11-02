@@ -76,7 +76,7 @@ FT.update tm (get_frame_time ());
 Then after the `clear_background Color.raywhite;` add
 
 ```ocaml
-draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
+draw_circle (Int.of_float ball.x) (Int.of_float !(ball.y)) ball.r Color.maroon;
 ```
 
 to actually draw the ball. 
@@ -109,7 +109,7 @@ let rec loop () =
     FT.update tm (get_frame_time ());
     begin_drawing ();
     clear_background Color.raywhite;
-    draw_circle_v (Vector2.create ball.x !(ball.y)) ball.r Color.maroon;
+    draw_circle (Int.of_float ball.x) (Int.of_float !(ball.y)) ball.r Color.maroon;
     end_drawing ();
     loop ()
   )
