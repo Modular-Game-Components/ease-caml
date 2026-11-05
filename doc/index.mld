@@ -146,6 +146,8 @@ The ball will bounce, then the console will print [Game over!]. Alternatively, i
 
 {2 Chaining Tweens}
 
+{video:https://github.com/user-attachments/assets/79ffcb12-5f94-4412-8ded-28539f65ed6f}
+
 Suppose we want a ball that moves back and forth. Referring to the previous example, instead of
 
 {[
