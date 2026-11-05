@@ -47,7 +47,7 @@ let ball : circle = { r = 40.0; x = 400.0; y = ref ~-.40.0 }
 
 This will create a ball just outside the viewport. Note that [y] is a float ref since we will be making the ball fall in the [y] direction (and thus [y] must also be mutable!).
 
-Now we will create a tween to move the ball, right below let ball : circle = ... add
+Now we will create a tween to move the ball, right below [let ball : circle = ...] add
 
 {[
 let ty = FT.make_tween ball.y 225.0 ~ef:Easers.bounce 1.0
