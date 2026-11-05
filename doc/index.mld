@@ -4,6 +4,8 @@
 
 {1 A Simple Example}
 
+{video:https://github.com/user-attachments/assets/03dc5fc6-17c6-4ba7-acfe-e983be9997dc}
+
 We will use the {{: https://github.com/tjammer/raylib-ocaml }raylib-ocaml } game framework to demonstrate how to use [ease-caml]. However, any game framework with a sufficiently decent game loop should suffice.
 
 Consider the example presented in the raylib-ocaml README:
