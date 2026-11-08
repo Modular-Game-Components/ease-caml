@@ -146,7 +146,7 @@ The ball will bounce, then the console will print [Game over!]. Alternatively, i
 
 {2 Chaining Tweens}
 
-{video:https://github-production-user-asset-6210df.s3.amazonaws.com/349918/696619027-79ffcb12-5f94-4412-8ded-28539f65ed6f.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20261108%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261108T152529Z&X-Amz-Expires=300&X-Amz-Signature=fe227fecac54224c97b1725ee6ebfe768d9f5b13f3dec2bdc3a02916702f7f2a&X-Amz-SignedHeaders=host&response-content-type=video%2Fmp4}
+{video:https://github.com/user-attachments/assets/9ebd1001-c80b-4547-9923-31b3a07535a7}
 
 Suppose we want a ball that moves back and forth. Referring to the previous example, instead of
 
