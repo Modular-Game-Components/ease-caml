@@ -1,11 +1,6 @@
 # For Mac
 .DS_Store
 
-# For recordings
-*.gif
-*.mp4
-
-
 *.annot
 *.cmo
 *.cma
