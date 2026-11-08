@@ -223,7 +223,7 @@ let repeat = FT.repeat left_right ~-1
 
 {2 Tweening a Vector}
 
-{video!./collection_tween.mp4}
+{video:https://github.com/user-attachments/assets/b2cb2c47-9017-4121-8f5a-a55350294282}
 
 You may want to operate on a collection of floats such as a vector of floats. Technically, all you need is [FloatTween] and you can create a tween for each component of the vector. It would be nice to just have one tween for the {i entire} vector. Fortunately, you can do this in [ease-caml]! Since there is a lot of different vector libraries, [ease-caml] uses {i functors} to easily adapt to whichever vector library you want to use. We provide an example using Raylib vectors.
 
