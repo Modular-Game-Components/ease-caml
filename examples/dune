@@ -1,5 +1,5 @@
 (executables
   (names simple_tween repeat_simple_tween repeat_twice back_and_forth 
          comb_back_and_forth simple_callback record_simple_tween
-         collection_example record_back_and_forth)
+         collection_example record_collection_example record_back_and_forth)
   (libraries raylib ease-caml))

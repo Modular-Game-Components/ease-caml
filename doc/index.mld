@@ -146,7 +146,7 @@ The ball will bounce, then the console will print [Game over!]. Alternatively, i
 
 {2 Chaining Tweens}
 
-{video:https://github.com/user-attachments/assets/79ffcb12-5f94-4412-8ded-28539f65ed6f}
+{video:https://github-production-user-asset-6210df.s3.amazonaws.com/349918/696619027-79ffcb12-5f94-4412-8ded-28539f65ed6f.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20261108%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261108T152529Z&X-Amz-Expires=300&X-Amz-Signature=fe227fecac54224c97b1725ee6ebfe768d9f5b13f3dec2bdc3a02916702f7f2a&X-Amz-SignedHeaders=host&response-content-type=video%2Fmp4}
 
 Suppose we want a ball that moves back and forth. Referring to the previous example, instead of
 
@@ -222,6 +222,8 @@ let repeat = FT.repeat left_right ~-1
 ]}
 
 {2 Tweening a Vector}
+
+{video:https://github-production-user-asset-6210df.s3.amazonaws.com/349918/698971079-c292eab3-9f81-409c-8a2d-932774af1235.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20261108%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261108T152415Z&X-Amz-Expires=300&X-Amz-Signature=672209e4786b5166a37b654bdd9506696d0ae32d82663752270ffb1b707d1b1c&X-Amz-SignedHeaders=host&response-content-type=video%2Fmp4}
 
 You may want to operate on a collection of floats such as a vector of floats. Technically, all you need is [FloatTween] and you can create a tween for each component of the vector. It would be nice to just have one tween for the {i entire} vector. Fortunately, you can do this in [ease-caml]! Since there is a lot of different vector libraries, [ease-caml] uses {i functors} to easily adapt to whichever vector library you want to use. We provide an example using Raylib vectors.
 
