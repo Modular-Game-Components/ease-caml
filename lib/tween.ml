@@ -48,7 +48,11 @@ module Make (V: VECTOR) = struct
   and tween = Node of tween_node | Nested of tween_interior
 
   (* Called in the update function and updates every tween added to it. *)
-  type tween_manager = tween list ref
+  type tween_manager =
+  {
+    mutable tweens: tween list;
+    mutable paused: bool;
+  }
 
   (* Constructor for a tween. *)
   let make_tween_node (obj: V.v ref) ?(sv: V.v = !obj) (ev: V.v) ?(ef: float -> float = (fun x -> x)) (d: float) = {
@@ -218,14 +222,20 @@ module Make (V: VECTOR) = struct
   let ( $+ ) = set_callback
 
   let update (tm: tween_manager) (dt: float) : unit =
-    List.iter (fun x -> update_tween x dt) !tm;
-    tm := List.filter (fun x -> not (is_finished x)) !tm
+    match tm.paused with
+    | false -> List.iter (fun x -> update_tween x dt) tm.tweens;
+               tm.tweens <- List.filter (fun x -> not (is_finished x)) tm.tweens
+    | true -> ()
 
 
-  let new_manager () : tween_manager = ref []
+  let new_manager () : tween_manager =
+  {
+    tweens = [];
+    paused = false;
+  }
 
   let add (t: tween) (tm: tween_manager) : unit =
-    tm := !tm @ [t]
+    tm.tweens <- tm.tweens @ [t]
 
   let rec extend (tws: tween list) (tm: tween_manager) : unit =
     match tws with
@@ -233,9 +243,17 @@ module Make (V: VECTOR) = struct
     | h :: t -> add h tm; extend t tm
 
   let running (tm: tween_manager): bool =
-    match !tm with
-    | [] -> false
-    | _ -> true
+    match tm.paused with
+    | true -> false
+    | false -> match tm.tweens with
+               | [] -> false
+               | _ -> true
+
+  let pause (tm: tween_manager): unit = tm.paused <- true
+
+  let resume (tm: tween_manager): unit = tm.paused <- false
+
+  let paused_toggle (tm: tween_manager): unit = tm.paused <- not tm.paused
 end
 
 (* Single float preset *)

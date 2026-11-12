@@ -56,7 +56,7 @@ module Make (V: VECTOR) : sig
 
   (** A [tween_manager] is in charge of updating a collection of tweens in a game loop. See 
       {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[examples/simple_tween.ml]} for how the [tween_manager] is used in the Raylib game loop. *)
-  type tween_manager = tween list ref
+  type tween_manager
 
   (** {3 [tween_manager] functions} *)
 
@@ -74,6 +74,16 @@ module Make (V: VECTOR) : sig
 
   (** Updates the values of the tweens that a particular [tween_manager] manages. *)
   val update : tween_manager -> float -> unit
+
+  (** Pause a tween manager. (Calls to update do nothing) *)
+  val pause : tween_manager -> unit
+
+  (** Resume a tween manager. (Calls to update update the tweens contained by the tween manager. *)
+  val resume : tween_manager -> unit
+
+  (** Toggle the paused field in a [tween_manager]. If paused resume the [tween_manager], else pause. *)
+  val paused_toggle : tween_manager -> unit
+
 end
 
 module FloatTween : sig
@@ -120,7 +130,7 @@ module FloatTween : sig
 
   (** A [tween_manager] is in charge of updating a collection of tweens in a game loop. See 
       {{:https://github.com/Modular-Game-Components/ease-caml/blob/master/examples/simple_tween.ml}[examples/simple_tween.ml]} for how the [tween_manager] is used in the Raylib game loop. *)
-  type tween_manager = tween list ref
+  type tween_manager
 
   (** {3 [tween_manager] functions} *)
 
@@ -138,5 +148,14 @@ module FloatTween : sig
 
   (** Updates the values of the tweens that a particular [tween_manager] manages. *)
   val update : tween_manager -> float -> unit
+
+  (** Pause a tween manager. (Calls to update do nothing) *)
+  val pause : tween_manager -> unit
+
+  (** Resume a tween manager. (Calls to update update the tweens contained by the tween manager. *)
+  val resume : tween_manager -> unit
+
+  (** Toggle the paused field in a [tween_manager]. If paused resume the [tween_manager], else pause. *)
+  val paused_toggle : tween_manager -> unit
 
 end
