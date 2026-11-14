@@ -46,6 +46,9 @@ module Make (V: VECTOR) : sig
       [?preserve_ease] is set to [true] (defaults as [false]) *)
   val reverse : ?preserve_ease:bool -> tween -> tween
 
+  (** Shorthand for reversing a tween. See [reverse]. *)
+  val ( !! ) : ?preserve_ease:bool -> tween -> tween
+
   (** Shorthand binary operation for [extends] *)
   val ( $> ) : tween -> tween -> tween
 
@@ -131,6 +134,9 @@ module FloatTween : sig
       reversed the ease function is composed with [Easers.out] unless
       [?preserve_ease] is set to [true] (defaults as [false]) *)
   val reverse : ?preserve_ease:bool -> tween -> tween
+
+  (** Shorthand for reversing a tween. See [reverse]. *)
+  val ( !! ) : ?preserve_ease:bool -> tween -> tween
 
   (** Shorthand binary operation for [extends] *)
   val ( $> ) : tween -> tween -> tween

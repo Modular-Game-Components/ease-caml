@@ -224,6 +224,8 @@ module Make (V: VECTOR) = struct
     | Nested x -> let rev_children = List.map (reverse ~preserve_ease:preserve_ease) x.children in
                   Nested { x with children = List.rev rev_children}
 
+  let ( !! ) = reverse
+
   let set_callback (t: tween) (f: unit -> unit) = match t with
     | Node t -> t.callback <- f
     | Nested t -> t.callback <- f
