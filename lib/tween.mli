@@ -41,8 +41,10 @@ module Make (V: VECTOR) : sig
   val combine : tween list -> tween
 
   (** Returns a tween that operates in reverse. Thus, if one goes from point a
-      to b the reverse tween goes from point b to a. *)
-  val reverse : tween -> tween
+      to b the reverse tween goes from point b to a. Note: when a tween is
+      reversed the ease function is composed with [Easers.out] unless
+      [?preserve_ease] is set to [true] (defaults as [false]) *)
+  val reverse : ?preserve_ease:bool -> tween -> tween
 
   (** Shorthand binary operation for [extends] *)
   val ( $> ) : tween -> tween -> tween
@@ -125,8 +127,10 @@ module FloatTween : sig
   val combine : tween list -> tween
 
   (** Returns a tween that operates in reverse. Thus, if one goes from point a
-      to b the reverse tween goes from point b to a. *)
-  val reverse : tween -> tween
+      to b the reverse tween goes from point b to a. Note: when a tween is
+      reversed the ease function is composed with [Easers.out] unless
+      [?preserve_ease] is set to [true] (defaults as [false]) *)
+  val reverse : ?preserve_ease:bool -> tween -> tween
 
   (** Shorthand binary operation for [extends] *)
   val ( $> ) : tween -> tween -> tween
