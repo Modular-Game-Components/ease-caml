@@ -1,5 +1,4 @@
 module FT = Tween.FloatTween
-let (!!) = FT.(!!)
 
 type circle =
 {
