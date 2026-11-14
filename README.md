@@ -84,7 +84,7 @@ to actually draw the ball.
 All in all you should now have:
 
 ```ocaml
-module FT = FT.FloatTween
+module FT = Tween.FloatTween
 
 type circle =
 {
