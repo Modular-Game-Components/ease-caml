@@ -217,6 +217,11 @@ module Make (V: VECTOR) = struct
              | Nested x -> x.parent <- Some new_tween) tweens;
            Nested new_tween
 
+  let rec reverse (t: tween) : tween = match t with
+    | Node x -> Node { x with ease_func = (Easers.out x.ease_func) }
+    | Nested x -> let rev_children = List.map reverse x.children in
+                  Nested { x with children = List.rev rev_children}
+
   let set_callback (t: tween) (f: unit -> unit) = match t with
     | Node t -> t.callback <- f
     | Nested t -> t.callback <- f

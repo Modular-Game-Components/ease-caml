@@ -40,6 +40,10 @@ module Make (V: VECTOR) : sig
       order. *)
   val combine : tween list -> tween
 
+  (** Returns a tween that operates in reverse. Thus, if one goes from point a
+      to b the reverse tween goes from point b to a. *)
+  val reverse : tween -> tween
+
   (** Shorthand binary operation for [extends] *)
   val ( $> ) : tween -> tween -> tween
 
@@ -119,6 +123,10 @@ module FloatTween : sig
   (** Take a list of tweens and return a tween that plays each supplied tween in
       order. *)
   val combine : tween list -> tween
+
+  (** Returns a tween that operates in reverse. Thus, if one goes from point a
+      to b the reverse tween goes from point b to a. *)
+  val reverse : tween -> tween
 
   (** Shorthand binary operation for [extends] *)
   val ( $> ) : tween -> tween -> tween
