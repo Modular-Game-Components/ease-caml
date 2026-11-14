@@ -220,7 +220,10 @@ module Make (V: VECTOR) = struct
   let rec reverse ?(preserve_ease=false) (t: tween) : tween =
     let ease = if preserve_ease then Fun.id else Easers.out in 
     match t with
-    | Node x -> Node { x with ease_func = (ease x.ease_func) }
+    | Node x -> Node { x with 
+                       ease_func = (ease x.ease_func); 
+                       start_val = x.end_val; 
+                       end_val = x.start_val}
     | Nested x -> let rev_children = List.map (reverse ~preserve_ease:preserve_ease) x.children in
                   Nested { x with children = List.rev rev_children}
 
