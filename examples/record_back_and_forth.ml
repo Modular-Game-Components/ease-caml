@@ -20,7 +20,7 @@ type circle =
 
 let ball : circle = { r = 40.0; x = ref 200.0; y = 225.0 }
 let left = FT.make_tween ball.x 600.0 ~ef:Easers.quad 1.0
-let right = FT.make_tween ball.x ~sv:600.0 200.0 ~ef:Easers.quad 1.0
+let right = FT.reverse ~preserve_ease:true left
 let repeat = FT.repeat (FT.extends left right) 2
 let tm = FT.new_manager ()
 let frames_dir = "frames"
