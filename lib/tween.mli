@@ -78,8 +78,14 @@ module Make (V: VECTOR) : sig
   (** Pause a tween manager. (Calls to update do nothing) *)
   val pause : tween_manager -> unit
 
+  (** Set the function that is called when a [tween_manager] is paused. *)
+  val set_pause : tween_manager -> (unit -> unit) -> unit
+
   (** Resume a tween manager. (Calls to update update the tweens contained by the tween manager. *)
   val resume : tween_manager -> unit
+
+  (** Set the function that is called when a [tween_manager] resumes from being paused. *)
+  val set_resume : tween_manager -> (unit -> unit) -> unit
 
   (** Toggle the paused field in a [tween_manager]. If paused resume the [tween_manager], else pause. *)
   val paused_toggle : tween_manager -> unit
@@ -152,8 +158,14 @@ module FloatTween : sig
   (** Pause a tween manager. (Calls to update do nothing) *)
   val pause : tween_manager -> unit
 
+  (** Set the function that is called when a [tween_manager] is paused. *)
+  val set_pause : tween_manager -> (unit -> unit) -> unit
+
   (** Resume a tween manager. (Calls to update update the tweens contained by the tween manager. *)
   val resume : tween_manager -> unit
+
+  (** Set the function that is called when a [tween_manager] resumes from being paused. *)
+  val set_resume : tween_manager -> (unit -> unit) -> unit
 
   (** Toggle the paused field in a [tween_manager]. If paused resume the [tween_manager], else pause. *)
   val paused_toggle : tween_manager -> unit

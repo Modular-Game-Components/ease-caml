@@ -52,6 +52,8 @@ module Make (V: VECTOR) = struct
   {
     mutable tweens: tween list;
     mutable paused: bool;
+    mutable on_pause: unit -> unit;
+    mutable on_resume: unit -> unit
   }
 
   (* Constructor for a tween. *)
@@ -232,6 +234,8 @@ module Make (V: VECTOR) = struct
   {
     tweens = [];
     paused = false;
+    on_pause = (fun () -> ());
+    on_resume = (fun () -> ());
   }
 
   let add (t: tween) (tm: tween_manager) : unit =
@@ -249,11 +253,16 @@ module Make (V: VECTOR) = struct
                | [] -> false
                | _ -> true
 
-  let pause (tm: tween_manager): unit = tm.paused <- true
+  let pause (tm: tween_manager): unit = tm.paused <- true; tm.on_pause ()
 
-  let resume (tm: tween_manager): unit = tm.paused <- false
+  let set_pause (tm: tween_manager) (f: unit -> unit) = tm.on_pause <- f
 
-  let paused_toggle (tm: tween_manager): unit = tm.paused <- not tm.paused
+  let resume (tm: tween_manager): unit = tm.paused <- false; tm.on_resume ()
+
+  let set_resume (tm: tween_manager) (f: unit -> unit) = tm.on_resume <- f
+
+  let paused_toggle (tm: tween_manager): unit = tm.paused <- not tm.paused;
+    if tm.paused = true then tm.on_pause () else tm.on_resume ()
 end
 
 (* Single float preset *)
