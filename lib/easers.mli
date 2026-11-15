@@ -2,6 +2,8 @@
     {{:https://easings.net/}easings.net}. A tween is a (likely continuous) bijection from the unit interval to
     itself. *)
 
+(** {1 Builtin Easer Functions} *)
+
 (** Note: Linear is just the identity function in disguise and it is not listed in 
     {{:https://easings.net/}easings.net} *)
 val linear : float -> float
