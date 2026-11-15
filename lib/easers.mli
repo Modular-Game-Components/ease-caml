@@ -1,5 +1,5 @@
 (** A collection of common easing functions for tweens adapted to OCaml from
-    {{:https://easings.net/}easings.net}. A tween is a (likely continuous) bijection from the unit interval to
+    {{:https://easings.net/}easings.net}. A tween is a (likely continuous) function from the unit interval to
     itself. *)
 
 (** {1 Builtin Easer Functions} *)
