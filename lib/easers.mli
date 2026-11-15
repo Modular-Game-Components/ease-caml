@@ -1,7 +1,11 @@
 (** A collection of common easing functions for tweens adapted to OCaml from
-    {{:https://easings.net/}easings.net} *)
+    {{:https://easings.net/}easings.net}. A tween is a (likely continuous) bijection from the unit interval to
+    itself. *)
 
+(** Note: Linear is just the identity function in disguise and it is not listed in 
+    {{:https://easings.net/}easings.net} *)
 val linear : float -> float
+
 val quad : float -> float
 val cubic : float -> float
 val quart : float -> float

@@ -4,20 +4,21 @@
     conjunction with the Raylib game library. For common continuous functions 
     used to change the values over time, see the [Easers] module. *)
 
-(** Need something to (left) multiply a [float] with. Usually another [float], but can be a vector of 
-    [float]s too for instance. *)
+(** Need something to (left) scalar multiply and add two collections together. More than likely, a vector, hence the
+    name. *)
 module type VECTOR = sig
   type v
   val ( *. ) : float -> v -> v
   val ( +. ) : v -> v -> v
 end
 
+(** Takes a [VECTOR] and makes it into something that is tweenable. *)
 module Make (V: VECTOR) : sig
   (** {1 The Main Datastructures} *)
 
   (** {2 [tween] type} *)
 
-  (** A tween is a (continuous) change of a real value (in this library a [float ref]) from one value to another over time. *)
+  (** A tween is a (continuous) change of a real value(s) from one value to another over time. *)
   type tween
 
   (** Creates a tween. Takes a start value, end value, an easing function, a
@@ -101,12 +102,16 @@ module Make (V: VECTOR) : sig
 
 end
 
+(** Tween for a collection of one floats, that is it allows you to tween over [float ref] types. *)
 module FloatTween : sig
   (** {1 The Main Datastructures} *)
 
+  (** Remark: This is nearly identical to [Make] module, except it specialized to the [float] type! *)
+
   (** {2 [tween] type} *)
 
-  (** A tween is a (continuous) change of a real value (in this library a [float ref]) from one value to another over time. *)
+  (** A tween is a (continuous) change of a real value (in this instance, a [float ref]) from one value to another over 
+      time. *)
   type tween
 
   (** Creates a tween. Takes a start value, end value, an easing function, a
