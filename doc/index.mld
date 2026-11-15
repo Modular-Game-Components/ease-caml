@@ -233,8 +233,8 @@ First, we need to make an instance of the [Tween] module that is specialized to 
 module Double = struct
   open Raylib
   type v = Raylib.Vector2.t
-  let ( *. ) (s: float) (v: Vector2.t) = Vector2.create (s *. (Vector2.x v)) (s *. (Vector2.y v))
-  let ( +. ) (v: Vector2.t) (w: Vector2.t) = Vector2.create (Vector2.x v +. Vector2.x w) (Vector2.y v +. Vector2.y w)
+  let ( *. ) = Fun.flip Vector2.scale
+  let ( +. ) = Vector2.add
 end
 
 module V2Tween = Tween.Make(Double)
