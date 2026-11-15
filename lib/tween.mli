@@ -70,7 +70,7 @@ module Make (V: VECTOR) : sig
   (** {3 [tween_manager] functions} *)
 
   (** Create a new tween manager *)
-  val new_manager : unit -> tween_manager
+  val new_manager : ?on_pause:(unit -> unit) -> ?on_resume:(unit -> unit) -> unit -> tween_manager
 
   (** Adds a tween to a particular [tween_manager]. *)
   val add : tween -> tween_manager -> unit
@@ -159,7 +159,7 @@ module FloatTween : sig
   (** {3 [tween_manager] functions} *)
 
   (** Create a new tween manager *)
-  val new_manager : unit -> tween_manager
+  val new_manager : ?on_pause:(unit -> unit) -> ?on_resume:(unit -> unit) -> unit -> tween_manager
 
   (** Adds a tween to a particular [tween_manager]. *)
   val add : tween -> tween_manager -> unit

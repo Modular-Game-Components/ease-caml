@@ -242,12 +242,12 @@ module Make (V: VECTOR) = struct
     | true -> ()
 
 
-  let new_manager () : tween_manager =
+  let new_manager ?(on_pause=(fun () -> ())) ?(on_resume=(fun () -> ())) () : tween_manager =
   {
     tweens = [];
     paused = false;
-    on_pause = (fun () -> ());
-    on_resume = (fun () -> ());
+    on_pause = on_pause;
+    on_resume = on_resume;
   }
 
   let add (t: tween) (tm: tween_manager) : unit =
