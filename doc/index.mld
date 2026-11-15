@@ -186,7 +186,31 @@ Let's analyze whats been changed:
 - [left] should make the ball move from left to right.
 - [right] should make the ball move from right to left.
 
-{3 The Wrong Way}
+{3 A Shortcut: [reverse]}
+
+Dealing with coordinates can be tedious and sometimes we can avoid it. Changing
+
+{[
+let right = FT.make_tween ball.x ~sv:600.0 200.0 ~ef:Easers.quad 1.0
+]}
+
+to:
+
+{[
+let right = !!left
+]}
+
+nearly gives us what we want. [(!!)] is short hand for creating a new [tween] that is the reverse of the original. However, this does not quite work. Reversing also reverses the ease function by default which does not happen above. Fortunately, you can just do:
+
+{[
+let right = FT.reverse ~preserve_ease:true left
+]}
+
+to not reverse the ease method and get what we want!
+
+{3 Adding the Tweens}
+
+{4 The Wrong Way}
 
 It might be tempting to put
 
@@ -197,7 +221,7 @@ It might be tempting to put
 
 But this will not work because it will run both tweens [left] and [right] at the same time for each iteration of the game loop. We need to perform [left] then [right]. 
 
-{3 The Right Way}
+{4 The Right Way}
 
 We now address this issue. To do so we make a new tween:
 
